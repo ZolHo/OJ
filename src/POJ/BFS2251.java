@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 /**
  * Created by hao on 16-11-19.
+ * 三维迷宫
  */
 public class BFS2251 {
     static int L, R, C;

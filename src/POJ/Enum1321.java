@@ -4,8 +4,9 @@ import java.util.Scanner;
 
 /**
  * Created by hao on 16-11-17.
+ * 棋盘摆放遍历
  */
-public class Search1321 {
+public class Enum1321 {
 
     static int map[][];
     static boolean vis[][];
