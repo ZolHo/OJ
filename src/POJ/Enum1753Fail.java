@@ -6,7 +6,7 @@ import java.util.Scanner;
  * Flip Game
  * Created by hao on 16-11-7.
  */
-public class enum1753Fail {
+public class Enum1753Fail {
 
     Scanner scanner = new Scanner(System.in);
     boolean boardCast[] = new boolean[16];
@@ -15,7 +15,7 @@ public class enum1753Fail {
     int vis[] = new int[16];
 
    public static void main(String args[]) {
-       enum1753Fail instance = new enum1753Fail();
+       Enum1753Fail instance = new Enum1753Fail();
        instance.boardGet();
        instance.doIt(0,0);
        instance.putOut();

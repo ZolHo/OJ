@@ -5,7 +5,7 @@ import java.util.Scanner;
 /**
  * Created by hao on 16-11-15.
  */
-public class enum2965TLE {
+public class Enum2965TLE {
 
     static boolean [][] map = new boolean[4][4];
     static boolean[][] vis = new boolean[4][4];
