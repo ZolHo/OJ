@@ -2,7 +2,6 @@ package blackAndWhite;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -15,44 +14,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
-import javax.swing.border.BevelBorder;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.net.*;
-
-import javax.swing.*;
-import javax.swing.border.*;
-
-import org.omg.CORBA.CTX_RESTRICT_SCOPE;
-import org.omg.CORBA.Context;
-import org.omg.CORBA.ContextList;
-import org.omg.CORBA.DomainManager;
-import org.omg.CORBA.ExceptionList;
-import org.omg.CORBA.NVList;
-import org.omg.CORBA.NamedValue;
-import org.omg.CORBA.Object;
-import org.omg.CORBA.Policy;
-import org.omg.CORBA.Request;
-import org.omg.CORBA.SetOverrideType;
-import org.omg.PortableServer.AdapterActivator;
-import org.omg.PortableServer.POA;
-
-
-
-
-
 
 
 public class Draw extends JFrame implements ActionListener  {
@@ -78,7 +47,7 @@ public class Draw extends JFrame implements ActionListener  {
 	static int [][]diannaoxia=new int[8][8];//电脑检索棋盘上可以下的地方
 	static int [][]qiziwz = new int [8][8];
 	static int [][]shunxu = new int [8][8];
-	static int sx =1;
+	static int sx =0;
 	public static int dangQian = black ;//当前的棋子为（默认黑棋先下）
 	public  static JButton start;//开始按钮
 	public static JLabel xiaqifang;//当前下棋方是谁
@@ -95,7 +64,11 @@ public class Draw extends JFrame implements ActionListener  {
 	public static int WJ2;
 	public static boolean GB;
 	public static int chxs=1;
-	public static int hq=4;
+	public static int hq;
+	public static boolean  zz;
+	public static boolean  zzdn;
+	public static int n=0;
+	public static int m=0;
 	//构造方法
 	public Draw(){
 		super("黑白棋");
@@ -115,15 +88,23 @@ public class Draw extends JFrame implements ActionListener  {
 	//按钮动作捕捉
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == start) {
+			n++;
+			zzdn=true;
+			if(n==1){zz=true;}
+			cxyx();
+			zz=false;
+			dangQian =1;
+			xiaqifang.setText("当前下棋方为黑方");
 			renren();
-
-			this.mypanel.qipan();
-
+			System.out.println("m的值为"+m);
 		}//开始按钮
 		if (e.getSource()== computerStart){
-			renji();
-			this.mypanel.qipan();
+			n++;
+			cxyx();
+			dangQian =1;
+			xiaqifang.setText("当前下棋方为黑方");
 			xuanzerj xz = new xuanzerj();
+			renji();
 		}//人机按钮
 		if(e.getSource()==lianji){
 			Ip ip= new Ip();
@@ -163,10 +144,19 @@ public class Draw extends JFrame implements ActionListener  {
 		computerStart.addActionListener(this);//为开始按钮添加动作监听器
 		getserver();
 	}
+	//终止方法
+	public boolean zhongzhi(boolean zz){
+		return zz;
+	}
+	public static boolean zhongzhidn(boolean zzdn){
+		return zzdn;
+	}
 	//人人
 	public void renren(){
+
 		addMouseListener(new MouseAdapter() {   //鼠标监听器
 			public void mouseClicked(MouseEvent e){
+				if(zz){return;}
 				int i = e.getButton();//按了鼠标哪个键
 				x =e.getX()-11;//屏幕上的x 并本地初始化
 				y=e.getY()-83;//屏幕上的x 并本地初始化
@@ -241,10 +231,10 @@ public class Draw extends JFrame implements ActionListener  {
 								dangQian = - dangQian;
 								shengfu();
 								if(nengxiafou(dangQian)==false){shengfuqizi();x1=-1;y1=-1;dangQian=-dangQian;if(dangQian==1){xiaqifang.setText("当前下棋方为黑方");}
-									if(dangQian==-1){xiaqifang.setText("当前下棋方为白方");DF=0;writer.println(13+","+13);}}
+									if(dangQian==-1){xiaqifang.setText("当前下棋方为白方");DF=0;}}
 								if(dangQian==1){xiaqifang.setText("当前下棋方为黑方");}
 								if(dangQian==-1){xiaqifang.setText("当前下棋方为白方");}
-
+								DF=1;
 							}
 							}
 						}
@@ -262,8 +252,7 @@ public class Draw extends JFrame implements ActionListener  {
 			if (check(dangQian,ljx,ljy)==false){if(dangQian==1){xiaqifang.setText("当前下棋方为黑方");}
 				if(dangQian==-1){xiaqifang.setText("当前下棋方为白方");}	System.out.println("你不能这样下");}
 
-			if(nengxiafou(dangQian)==false){shengfuqizi();ljx=-1;ljy=-1;dangQian=-dangQian;if(dangQian==1){xiaqifang.setText("当前下棋方为黑方");}
-				if(dangQian==-1){xiaqifang.setText("当前下棋方为白方");DF=0;}}
+
 
 			else{if (check(dangQian,ljx,ljy)&&nengxiafou(dangQian)){
 				if (ljtoleft(dangQian,ljx,ljy)){ljChange.changeleft(dangQian);}
@@ -280,6 +269,8 @@ public class Draw extends JFrame implements ActionListener  {
 				shengfu();
 				if(dangQian==1){xiaqifang.setText("当前下棋方为黑方");}
 				if(dangQian==-1){xiaqifang.setText("当前下棋方为白方");}
+				if(nengxiafou(dangQian)==false){shengfuqizi();ljx=-1;ljy=-1;dangQian=-dangQian;if(dangQian==1){xiaqifang.setText("当前下棋方为黑方");}
+					if(dangQian==-1){xiaqifang.setText("当前下棋方为白方");DF=1;}}
 				DF=0;
 
 			}
@@ -320,8 +311,8 @@ public class Draw extends JFrame implements ActionListener  {
 							if(dangQian==1){xiaqifang.setText("当前下棋方为黑方");}
 							if(dangQian==-1){xiaqifang.setText("当前下棋方为白方");}
 							if(nengxiafou(dangQian)==false){shengfuqizi();x1=-1;y1=-1;dangQian=-dangQian;if(dangQian==1){xiaqifang.setText("当前下棋方为黑方");}
-								if(dangQian==-1){xiaqifang.setText("当前下棋方为白方");}return;}
-							diannao();
+								if(dangQian==-1){xiaqifang.setText("当前下棋方为白方");}}
+							else diannao();
 						}
 						}
 					}
@@ -699,6 +690,7 @@ public class Draw extends JFrame implements ActionListener  {
 	public static void diannao(){
 		int ii;
 		int jj;
+		if(zhongzhidn(zzdn)){return;}
 		if(dangQian!=-WJ)return;
 		for( ii=1 ;ii<=8;ii++){
 			for ( jj=1;jj<=8;jj++){
@@ -716,56 +708,57 @@ public class Draw extends JFrame implements ActionListener  {
 		}
 		if(Dcheck()==false){shengfu();dangQian=-dangQian;if(dangQian==1){xiaqifang.setText("当前下棋方为黑方");}
 			if(dangQian==-1){xiaqifang.setText("当前下棋方为白方");}diannao();}
+		else{
+			for ( ii=1;ii<=8;ii++){
+				for (jj=1;jj<=8;jj++){
 
-		for ( ii=1;ii<=8;ii++){
-			for (jj=1;jj<=8;jj++){
-
-				if(diannaoxia[ii-1][jj-1]==-1){
-					YX5(ii,jj);mypanel.chonghua();
+					if(diannaoxia[ii-1][jj-1]==-1){
+						YX5(ii,jj);mypanel.chonghua();
+					}
 				}
 			}
-		}
-		for ( ii=1;ii<=8;ii++){
-			for (jj=1;jj<=8;jj++){
+			for ( ii=1;ii<=8;ii++){
+				for (jj=1;jj<=8;jj++){
 
-				if(diannaoxia[ii-1][jj-1]==-1){
-					YX4(ii,jj);mypanel.chonghua();
+					if(diannaoxia[ii-1][jj-1]==-1){
+						YX4(ii,jj);mypanel.chonghua();
+					}
 				}
 			}
-		}
-		for ( ii=1;ii<=8;ii++){
-			for (jj=1;jj<=8;jj++){
+			for ( ii=1;ii<=8;ii++){
+				for (jj=1;jj<=8;jj++){
 
-				if(diannaoxia[ii-1][jj-1]==-1){
-					YX3(ii,jj);mypanel.chonghua();
+					if(diannaoxia[ii-1][jj-1]==-1){
+						YX3(ii,jj);mypanel.chonghua();
+					}
 				}
 			}
-		}
-		for ( ii=1;ii<=8;ii++){
-			for (jj=1;jj<=8;jj++){
+			for ( ii=1;ii<=8;ii++){
+				for (jj=1;jj<=8;jj++){
 
-				if(diannaoxia[ii-1][jj-1]==-1){
-					YX2(ii,jj);mypanel.chonghua();
+					if(diannaoxia[ii-1][jj-1]==-1){
+						YX2(ii,jj);mypanel.chonghua();
+					}
 				}
 			}
-		}
-		for ( ii=1;ii<=8;ii++){
-			for (jj=1;jj<=8;jj++){
+			for ( ii=1;ii<=8;ii++){
+				for (jj=1;jj<=8;jj++){
 
-				if(diannaoxia[ii-1][jj-1]==-1){
-					YX1(ii,jj);mypanel.chonghua();
+					if(diannaoxia[ii-1][jj-1]==-1){
+						YX1(ii,jj);mypanel.chonghua();
+					}
 				}
 			}
-		}
 
 
 
 
-		for ( ii=1;ii<=8;ii++){
-			for (jj=1;jj<=8;jj++){
+			for ( ii=1;ii<=8;ii++){
+				for (jj=1;jj<=8;jj++){
 
-				if(diannaoxia[ii-1][jj-1]==-1){
-					YX0(ii,jj);mypanel.chonghua();
+					if(diannaoxia[ii-1][jj-1]==-1){
+						YX0(ii,jj);mypanel.chonghua();
+					}
 				}
 			}
 		}
@@ -933,7 +926,7 @@ public class Draw extends JFrame implements ActionListener  {
 			dangQian=-dangQian;
 			if(dangQian==1){xiaqifang.setText("当前下棋方为黑方");}
 			if(dangQian==-1){xiaqifang.setText("当前下棋方为白方");}
-			if(nengxiafou(dangQian)==false){shengfuqizi();x1=-1;y1=-1;dangQian=-dangQian;if(dangQian==1){xiaqifang.setText("当前下棋方为黑方");}
+			if(nengxiafou(dangQian)==false){shengfuqizi();x1=-1;y1=-1;dangQian=-dangQian;if(dangQian==1){xiaqifang.setText("当前下棋方为黑方");diannao();}
 				if(dangQian==-1){xiaqifang.setText("当前下棋方为白方");}}
 			shengfu();
 			for (int ii=1;ii<=8;ii++){
@@ -2098,30 +2091,37 @@ public class Draw extends JFrame implements ActionListener  {
 
 	}
 	//客户端连接至别人电脑
-	void connect() {
+	public void connect() {
 		try {
-			socket = new Socket(iip,1997);
+			socket = new Socket("192.168.2.118",7777);
 			writer = new PrintWriter(socket.getOutputStream(), true);
 			System.out.println("连接成功");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	//发送黑棋的信息
-	public static void fasongheiqi(){
-		writer.println(10+","+10);
+
+
+
+
+
+
+
+	//重新游戏
+	public void cxyx(){
+		for (int i=1;i<=8;i++){
+			for (int j=1;j<=8;j++){
+				qizi[i-1][j-1]=0;
+			}
+		}
+		qizi[3][3]=-1;
+		qizi[4][4]=-1;
+		qizi[3][4]=1;
+		qizi[4][3]=1;
+
+		mypanel.tuqu();
+		mypanel.chonghua();
 	}
-	//发送白棋的信息
-	public static void fasongbaiqi(){
-		writer.println(11+","+11);
-	}
-
-
-
-
-
-
-
 
 
 
@@ -2136,21 +2136,21 @@ public class Draw extends JFrame implements ActionListener  {
 	//悔棋
 	public void huiqi(int dangqian,int i,int j){
 		qiziwz[i-1][j-1]=dangqian;
-		shunxu[i-1][j-1]=sx;
-		System.out.println(i+","+j);
-		System.out.println(sx);
 		sx++;
+		shunxu[i-1][j-1]=sx;
+		System.out.println("sx:"+sx);
+		System.out.println("shun"+shunxu[i-1][j-1]);
 	}
 	public void hqch(){
 		for (int i=1;i<=8;i++){
 			for (int j=1;j<=8;j++){
-				qizi[i-1][j-1]=0;
+				if(qizi[3][3]==-1||qizi[4][4]==-1||qizi[3][4]==1|| qizi[4][3]==1){
+					continue;
+				}
+				else qizi[i-1][j-1]=0;
 			}
 		}
-		qizi[3][3]=-1;
-		qizi[4][4]=-1;
-		qizi[3][4]=1;
-		qizi[4][3]=1;
+
 		mypanel.tuqu();
 		mypanel.chonghua();
 		hqch2();
@@ -2159,9 +2159,11 @@ public class Draw extends JFrame implements ActionListener  {
 		for (int i=1;i<=8;i++){
 			for (int j=1,dangqian=0;j<=8;j++){
 				if(shunxu[i-1][j-1]==chxs){
+					if(chxs==sx){qiziwz[i-1][j-1]=0;shunxu[i-1][j-1]=0;qizi[i-1][j-1]=0;sx=chxs-1;chxs=1;System.out.println("悔棋执行了");mypanel.tuqu();mypanel.chonghua();return;}
 					qizi[i-1][j-1]=qiziwz[i-1][j-1];
-					if(qizi[i-1][j-1]==1){dangqian=1;}
-					if(qizi[i-1][j-1]==-1){dangqian=-1;}
+					if(qiziwz[i-1][j-1]==1){dangqian=-1;}
+					if(qiziwz[i-1][j-1]==-1){dangqian=1;}
+					System.out.println("chxs:"+chxs);
 					chxs++;
 					System.out.println("chxs"+chxs);
 					hqx=i;
@@ -2174,11 +2176,13 @@ public class Draw extends JFrame implements ActionListener  {
 					if (hqtoleftup(dangqian,hqx,hqy)){hqChange.hqchangeleftup(dangQian);}
 					if (hqtorightup(dangqian,hqx,hqy)){hqChange.hqchangerightup(dangQian);}
 					if (hqtorightdown(dangqian,hqx,hqy)){hqChange.hqchangerightdown(dangQian);}
-					dangQian=-dangqian;
 					if(dangQian==1){xiaqifang.setText("当前下棋方为黑方");}
 					if(dangQian==-1){xiaqifang.setText("当前下棋方为白方");}
 					mypanel.tuqu();
 					mypanel.chonghua();
+					if(chxs<sx){hqch2();}
+
+
 
 				}
 			}
@@ -2549,7 +2553,7 @@ public class Draw extends JFrame implements ActionListener  {
 	class Ip extends JFrame implements ActionListener{
 		public JButton queding;
 		public void wenben(){
-			JTextField  ip = new JTextField();
+			final JTextField  ip = new JTextField();
 			queding = new JButton("连接");
 			queding.addActionListener(this);
 			this.add(ip,BorderLayout.NORTH);
@@ -2582,7 +2586,7 @@ public class Draw extends JFrame implements ActionListener  {
 	//服务器
 	void getserver() {
 		try {
-			server = new ServerSocket(1997);
+			server = new ServerSocket(8888);
 			System.out.println("服务器套接字已经创建成功"); // 输出信息
 			while (true) {
 				System.out.println("等待客户机的连接"); // 输出信息
@@ -2609,13 +2613,10 @@ public class Draw extends JFrame implements ActionListener  {
 					int x =Integer.valueOf(xx);
 					int y =Integer.valueOf(yy);
 					System.out.println(x+","+y);
-					if(x==10&&y==10){WJ=-1;System.out.println("这台机为白棋");}
-					if(x==11&&y==11){WJ=1;System.out.println("这台机为黑棋");}
-
 					Draw.ljx=x;
 					Draw.ljy=y;
 					Draw.DF=1;
-					if(DF==1&&ljx!=13&&ljy!=13)this.DFxiaqi();
+					if(DF==1)this.DFxiaqi();
 					mypanel.chonghua();
 					System.out.println(DF);
 				}
@@ -2661,13 +2662,12 @@ class xuanze extends JFrame implements ActionListener{
 		if (e.getSource()==hq){
 			Draw.WJ=1;
 			Draw.WJ2=-1;
-			Draw.fasongheiqi();
+			Draw.DF=0;
 			this.setVisible(false);
 		}
 		if(e.getSource()==bq){
 			Draw.WJ =-1;
 			Draw.WJ2=1;
-			Draw.fasongbaiqi();
 			this.setVisible(false);
 		}
 
