@@ -15,31 +15,23 @@ public class Fo_2 {
     /**
      * C(A,B) ,即从A个数中取B个数的组合,deep表示当前已经取出的个数
      */
-    static void combination(int deep,int pre, int A, int B) {
-        if (deep >= B) {
-//            count++;
-//            for (int i = 0; i < 5; i++) {
-//                System.out.print(get[i] + " ");
-//            }
-//            System.out.println();
-
+    static void combination(int deep,int pre) {
+        if (deep >= 5) {
             setVis();
             //DFS(get[0]/4, get[0]%4);
             BFS(get[0]);
             if (isOk()) {
                 count++;
             }
-
             return;
         }
-        for (int i = pre+1; i < A; i++) {
+        for (int i = pre+1; i < 12; i++) {
             get[deep] = i;
-            combination(deep+1, i, A, B);
+            combination(deep+1, i);
         }
     }
-
     /**
-     * 
+     * 判断是否是5张连在一起的
      */
     static boolean isOk() {
         for (int i = 0; i < 3; i++) {
@@ -116,7 +108,7 @@ public class Fo_2 {
         vis = new boolean[3][4];
         get = new int[5];
         count = 0;
-        combination(0, -1, 12, 5);
+        combination(0, -1);
         System.out.print(count);
     }
 }
