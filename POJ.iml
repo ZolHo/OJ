@@ -11,20 +11,11 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/lib" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/myAlgoLib/myAlgoLib.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/myAlgoLib.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$MODULE_DIR$/lib/myAlgoLib/myAlgoLib.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/myAlgoLib.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
