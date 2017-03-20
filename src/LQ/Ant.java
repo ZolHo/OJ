@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Ant {
     public static final int[][] U_R_D_L = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
     public static boolean[][] map;
-    public static int antHead;
+    public static int antHead; //头的方向,0为上,1为右...
     public static int k;
 
     public static void deal(int x, int y, int step) {
@@ -22,8 +22,8 @@ public class Ant {
         } else {
             antHead = (antHead + 3) % 4;
         }
-        map[x][y] = !map[x][y];
-        deal(x + U_R_D_L[antHead][0], y + U_R_D_L[antHead][1], step + 1);
+        map[x][y] = !map[x][y]; //反转
+        deal(x + U_R_D_L[antHead][0], y + U_R_D_L[antHead][1], step + 1); //将下一步传入,递归处理
     }
 
     public static void main(String s[]) {
@@ -36,21 +36,13 @@ public class Ant {
             for (int j = 0; j < y; j++) {
                 if (scanner.nextInt() == 1) {
                     map[i][j] = true;
-                } else {
-                    map[i][j] = false;
                 }
             }
             scanner.nextLine();
         }
         int firstX = scanner.nextInt();
         int firstY = scanner.nextInt();
-        String head = scanner.next();
-        switch (head) {
-            case "U": antHead = 0; break;
-            case "R": antHead = 1; break;
-            case "D": antHead = 2; break;
-            case "L": antHead = 3; break;
-        }
+        antHead = "URDL".indexOf(scanner.next().charAt(0));
         k = scanner.nextInt();
         deal(firstX, firstY, 0);
     }
